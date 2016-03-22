@@ -3,7 +3,7 @@ package com.test.my
 /**
   * Created by wangzihe on 2016/3/2.
   */
-object Algs4 {
+object Algs {
    def gcd(q: Int,p: Int): Int = {
      if (q == 0) return p
      val r = p % q
@@ -14,4 +14,5 @@ object Algs4 {
     println(rs)
     println("sss")
   }
+  
 }

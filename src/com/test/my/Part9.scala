@@ -1,5 +1,7 @@
 package com.test.my
 
+import com.sun.corba.se.impl.orbutil.graph.Node
+
 /**
   * Created by wangzihe on 2016/4/5.
   */
@@ -40,7 +42,7 @@ object Part9 {
      input match {
        case (a,b) => println("Processing (%d,%d)...",a,b)
        case "done" => println("done")
-       case _ => null
+       case _ => println("not match ..")
      }
   }
   processCoordinates((33,23))
@@ -58,7 +60,81 @@ object Part9 {
   processItems(List("red","blue","green"))
   processItems(List("red","blue","white"))
   processItems(List("apple","orange","grapes","dates"))
+//-----------------------------类型和卫述句的匹配---------------------------------------
+  def process(input: Any): Unit ={
+  input match {
+    case (a:Int,b:Int) => print("Processing (int, int)... ")
+    case (a:Double,b:Double) => print("Processing (double,double)...")
+    case msg: Int if(msg >1000000) => println("Processing int> 1000000")
+    case msg: Int =>print("Processing int... ")
+//    case msg: Int =>print("Processing int... ")
+//    case msg: Int if(msg >1000000) => println("Processing int> 1000000")
+    case msg: String => println("Processing string...")
+    case _ =>printf("Can't handle %s ... ",input)
+  }
+}
+  process((34.3,-123,3))
+  process(0)
+  process(1000001)
+  process(3.2)
+//  ----------------------case表达式里的模式变量和常量-------------------------------------
+  class Sample{
+    val max = 100
+    val MIN = 0
+    def process(input:Int): Unit ={
+      input match {
+//        case max => println("Don't try this at home")//Compiler error
+        case this.max => println("You matched max")
+        case MIN => println("You matched min")
+        case _ => println("Unreachable")
+      }
+    }
+  }
+  new Sample().process(100)
+  new Sample().process(0)
+  new Sample().process(10)
+//-----------------------------使用case类进行模式匹配-------------------------------------
+//  abstract case class Trade()//error
+ sealed abstract class Trade()//{
+//    def stockSymbol: String
+//    def quantity: Int
+//  }
+  case class Sell(stockSymbol: String,quantity: Int) extends Trade
+  case class Buy(stockSymbol: String,quantity: Int) extends Trade
+  case class Hedge(stockSymbol: String,quantity: Int) extends Trade
+  class TradeProcessor{
+    def processTransaction(request: Trade): Unit ={
+      request match {
+        case Sell(stock,1000)=>println("Selling 1000-units of "+stock)
+        case Sell(stock,quantity) =>
+          printf("Selling %d units of %s\n",quantity,stock)
+        case Buy(stock,quantity) if(quantity >2000) =>
+          printf("Buying %d (large) units of %s\n",quantity,stock)
+        case Buy(stock,quantity) => printf("Buying %d units of %s\n",quantity,stock)
+      }
+    }
+  }
+  val tradeProcessor = new TradeProcessor
+  tradeProcessor.processTransaction(Sell("GOOG",500))
+  tradeProcessor.processTransaction(Buy("GOOG",700))
+  tradeProcessor.processTransaction(Sell("GOOG",1000))
+  tradeProcessor.processTransaction(Buy("GOOG",3000))
 
+//  case class Apple()
+//  case class Orange()
+//  case class Book()
+//  class ThingsAcceptor{
+//    def acceptStuff(thing : Any): Unit ={ //error,The argument types of an anonymous function must be fully known. (SLS 8.5)
+//      case Apple() =>println("Thanks for the Apple")
+//      case Orange() =>println("Thanks for the Orange")
+//      case Book() =>println("Thanks for the Book")
+//      case _ => println("Excuse me, why did you send me a "+thing)
+//    }
+//  }
+//  val acceptor = new ThingsAcceptor
+//  acceptor.acceptStuff(Apple())
+//  acceptor.acceptStuff(Book())
+//  acceptor.acceptStuff(Apple)
   def main(args: Array[String]) {
 
   }

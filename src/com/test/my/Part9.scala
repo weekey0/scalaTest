@@ -120,11 +120,13 @@ object Part9 {
   tradeProcessor.processTransaction(Sell("GOOG",1000))
   tradeProcessor.processTransaction(Buy("GOOG",3000))
 
+//  error,The argument types of an anonymous function must be fully known. (SLS 8.5)
+//  Expected type was: Unit  def acceptStuff(thing : Unit)
 //  case class Apple()
 //  case class Orange()
 //  case class Book()
 //  class ThingsAcceptor{
-//    def acceptStuff(thing : Any): Unit ={ //error,The argument types of an anonymous function must be fully known. (SLS 8.5)
+//    def acceptStuff(thing : Any): Unit ={
 //      case Apple() =>println("Thanks for the Apple")
 //      case Orange() =>println("Thanks for the Orange")
 //      case Book() =>println("Thanks for the Book")
@@ -135,8 +137,69 @@ object Part9 {
 //  acceptor.acceptStuff(Apple())
 //  acceptor.acceptStuff(Book())
 //  acceptor.acceptStuff(Apple)
+//-------------------------使用提取器进行匹配---------------------------------------
+  StockService process "GOOG"
+  StockService process("IBM")
+  StockService process "ERR"
+  object StockService {
+    def process(input: String) = {
+      input match {
+        case Symbol() => println("Look up price for valid symbol "+ input)
+        // case ReceiveStockPrice(symbol,price)=>printf("Received price %f for symbol %s\n",price,symbol)
+        case ReceiveStockPrice(symbol @ Symbol(),price)=>
+          printf("Received price %f for symbol %s\n",price,symbol)
+        case _ => println("Invalid input "+ input)
+      }
+    }
+  }
+  object Symbol{
+    def unapply(symbol:String):Boolean = symbol == "GOOG" || symbol == "IBM"
+  }
+  object ReceiveStockPrice {
+    def unapply(s: String): Option[(String,Double)] = {
+      try{
+        if(s contains(":")){
+          val splitQuote = s split ":"
+          Some(splitQuote(0),splitQuote(1).toDouble)
+        }else{
+          None
+        }
+      }catch {
+        case _ : NumberFormatException => None
+      }
+    }
+  }
+  StockService process "GOOG"
+  StockService process("GOOG:310.84")
+  StockService process("GOOG:BUY")
+  StockService process("ERR:12.21")
+//  ------------------------------正则表达式--------------------------------
+  val pattern = "(S|s)cala".r
+  val str = "Scala is scalable and cool"
+  println(pattern findFirstIn str)
+  println(pattern findAllIn(str) mkString(", "))
+  println("cool".r replaceFirstIn(str, "awesome"))
+//  ----------------------------把正则表达式当做提取器------------------------------------
+  def process(input:String): Unit ={
+//    val GoogStock = """^GOOG:(\d*\.\d+)""".r
+    val MatchStock = """^(.+):(\d*\.\d+)""".r
+    input match {
+//      case GoogStock(price) =>println("Price of GOOG is "+ price)
+      case MatchStock("GOOG",price) => println("Price of GOOG is "+ price)
+      case MatchStock("IBM",price) => println("IBM's trading at "+ price)
+      case MatchStock(symbol,price) => printf("Price of %s is %s\n",symbol,price)
+      case _ =>println("not processing "+ input)
+    }
+  }
+  process("GOOG:310.84")
+  process("GOOG:310")
+  process("IBM:84.01")
+  process("GE:15.99")
+
   def main(args: Array[String]) {
 
   }
+
+
 
 }

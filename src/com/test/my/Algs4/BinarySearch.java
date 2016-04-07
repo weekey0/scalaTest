@@ -6,6 +6,7 @@ import com.test.my.Algs4.stblib.In;
 import com.test.my.Algs4.stblib.StdIn;
 import com.test.my.Algs4.stblib.StdOut;
 
+import java.lang.ref.SoftReference;
 import java.util.Arrays;
 
 /**
@@ -26,8 +27,18 @@ public class BinarySearch {
     }
 //    assert
     public static void main(String[] args){
-        int[] whilelist = In.readInts("E:\\test\\scalaTest\\src\\com\\test\\my\\Algs4\\fileIn");
+//        int[] whilelist = In.readInts("E:\\test\\scalaTest\\src\\com\\test\\my\\Algs4\\fileIn");
+//        Arrays.sort(whilelist);
+//        while(!StdIn.isEmpty()){//读取key值，如果不存在在名单中则将其打印
+//            int key = StdIn.readInt();
+//            if (rank(key,whilelist)<0){
+//                StdOut.println(key);
+//            }
+//        }
+        In in = new In(args[0]);
+        int[] whilelist = in.readAllInts();
         Arrays.sort(whilelist);
+        In inw = new In(args[1]);
         while(!StdIn.isEmpty()){//读取key值，如果不存在在名单中则将其打印
             int key = StdIn.readInt();
             if (rank(key,whilelist)<0){

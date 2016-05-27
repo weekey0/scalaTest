@@ -59,15 +59,48 @@
         <processorPath useClasspath="true" />
         <module name="webmagic-core" />
       </profile>
+      <profile default="false" name="Annotation profile for forger" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="true" />
+        <module name="forger" />
+      </profile>
+      <profile default="false" name="Annotation profile for webmagic-admin" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="true" />
+        <module name="webmagic-admin" />
+      </profile>
+      <profile default="false" name="Annotation profile for webmagic-avalon-common" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="true" />
+        <module name="webmagic-avalon-common" />
+      </profile>
+      <profile default="false" name="Annotation profile for webmagic-worker" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="true" />
+        <module name="webmagic-worker" />
+      </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
+    <bytecodeTargetLevel target="1.7">
+      <module name="scalaTest" target="1.8" />
+      <module name="webmagic-admin" target="1.6" />
+      <module name="webmagic-avalon" target="1.6" />
+      <module name="webmagic-avalon-common" target="1.6" />
       <module name="webmagic-core" target="1.6" />
       <module name="webmagic-extension" target="1.6" />
       <module name="webmagic-parent" target="1.6" />
-      <module name="webmagic-samples" target="1.6" />
+      <module name="webmagic-samples" target="1.8" />
       <module name="webmagic-saxon" target="1.6" />
       <module name="webmagic-scripts" target="1.6" />
       <module name="webmagic-selenium" target="1.6" />
+      <module name="webmagic-worker" target="1.6" />
     </bytecodeTargetLevel>
   </component>
 </project>
